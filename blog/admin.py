@@ -3,7 +3,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Category, Post
+from .models import Category, Post, Tag
 
 admin.site.register(Category)
 
@@ -15,6 +15,33 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ("title","body")
     date_hierarchy = "published_at"
     ordering = ("-published_at",)
+    
+prepopulated_fields = {"slug": ("title,")}
+readonly_fields = ("created_at", "updated_at")
+fieldsets = (
+    ("Basic info", {
+        "fields": ("title", "slug", "status"),
+    }),
+    )
+("content",({
+        "fields": ("body",),
+    }),
+    )
+("Relationships & Dates", ({
+        "fields": ("category", "published_at"),
+    }),
+    )
+("Timestamps",({
+        "fields": ("created_at", "updated_at"),
+    }),
+    )
+
+
+    
+admin.site.register(Tag)
+
+
+
 
 # python manage.py makemigrations
 # python manage.py migrate
